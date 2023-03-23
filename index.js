@@ -19,6 +19,8 @@ http.createServer(function (req,res){
 
 const express = require('express');
 const color = require('color');
+const morgan = require('morgan');
+
 const { nextTick } = require('vue');
 //const chalks = require('chalk');
 
@@ -27,12 +29,13 @@ const port = 5000;
 
 //middleware
 function logger(req,res,next){
-    console.log('Respuesta Recibida');
     next();
 }
 
 app.use(express.json());
 app.use(logger);
+app.use(morgan('dev'));
+
 
 app.all('/user', (req, res,next) => {
     console.log('POR AQUI pASO');
@@ -40,9 +43,9 @@ app.all('/user', (req, res,next) => {
     next();
   });
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   res.send('¡Hola, mundo!');
-})
+})*/
 
 app.get('/user', (req, res) => {
     res.json({username : 'Yoan',
@@ -60,6 +63,8 @@ app.post('/me', (req, res) => {
 app.put('/test', (req, res) => {
     res.send('<H1>Test</H1>>');
   });  
+
+app.use(express.static('public'));
 
 app.listen(port, () => {
   console.log(`Servidor Express.js escuchando en el puerto ${port}`);
